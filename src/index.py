@@ -1,8 +1,18 @@
 import discord
 from discord.ext import commands
 import uuid
+import json
 import requests
 import shutil
+
+with open("secret.json") as f:
+    secret = json.loads(f.read())
+
+def get_secret(secret_name, secrets=secret):
+    try:
+        return secrets[secret_name]
+    except:
+        msg = "La variable %s no existe" %secret_name
 
 
 bot = commands.Bot(command_prefix='>', description="Soy un bot para el ramo de IA")
@@ -32,4 +42,4 @@ async def save(ctx):
                 print('Saving image: ' + imageName)
                 shutil.copyfileobj(r.raw, out_file)     # save image (goes to project directory)
 
-bot.run('MTAwNDgzMjk2ODU2NjY0NDczNg.GV8I8f.UgxD426Cbl3RYyORfo0M_wTpPtFvUV--Tj7blE')
+bot.run(get_secret('tokenID'))
