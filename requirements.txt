@@ -1,3 +1,4 @@
+git+https://github.com/FranciscoPizarroBianchi/trabajo-ia
 aiohttp==3.7.4.post0
 async-timeout==3.0.1
 attrs==22.1.0
