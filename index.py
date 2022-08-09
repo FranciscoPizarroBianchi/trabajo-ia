@@ -42,4 +42,9 @@ async def save(ctx):
                 print('Saving image: ' + imageName)
                 shutil.copyfileobj(r.raw, out_file)     # save image (goes to project directory)
 
+@bot.command()
+async def give(ctx):
+    await ctx.send(file=discord.File(r'C:\Users\frpiz\Desktop\Universidad 2022\IA\TrabajoFinal\trabajo-ia\img/20bf9b3f-af6c-4ece-84e6-a1639f214337.jpg'))
+
+
 bot.run(get_secret('tokenID'))
