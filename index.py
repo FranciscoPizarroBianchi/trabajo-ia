@@ -5,8 +5,8 @@ import json
 import requests
 import shutil
 import os
+import subprocess
 
-"""
 with open("secret.json") as f:
     secret = json.loads(f.read())
 
@@ -15,15 +15,15 @@ def get_secret(secret_name, secrets=secret):
         return secrets[secret_name]
     except:
         msg = "La variable %s no existe" %secret_name
-"""
+
 
 bot = commands.Bot(command_prefix='>', description="Soy un bot para el ramo de IA")
 
 
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
+async def is_on(ctx):
+    await ctx.send('ola si')
 
 #Evento
 @bot.event
@@ -32,23 +32,31 @@ async def on_ready():
 
 @bot.command()
 async def save(ctx):
-    # USAGE: use command .save in the comment box when uploading an image to save the image as a jpg
     try:
-        url = ctx.message.attachments[0].url            # check for an image, call exception if none found
+        url = ctx.message.attachments[0].url
     except IndexError:
         print("Error: No attachments")
         await ctx.send("No attachments detected!")
     else:
-        if url[0:26] == "https://cdn.discordapp.com":   # look to see if url is from discord
+        if url[0:26] == "https://cdn.discordapp.com":
             r = requests.get(url, stream=True)
-            imageName = str(uuid.uuid4()) + '.jpg'      # uuid creates random unique id to use for image names
+            imageName = str(uuid.uuid4()) + '.jpg'
             with open("img/" + imageName, 'wb') as out_file:
                 print('Saving image: ' + imageName)
-                shutil.copyfileobj(r.raw, out_file)     # save image (goes to project directory)
+                shutil.copyfileobj(r.raw, out_file)
 
 @bot.command()
-async def give(ctx):
-    await ctx.send(file=discord.File(r'C:\Users\frpiz\Desktop\Universidad 2022\IA\TrabajoFinal\trabajo-ia\img/20bf9b3f-af6c-4ece-84e6-a1639f214337.jpg'))
+async def persona(ctx):
+    os.chdir("/root/IA/stargan-v2")
+    subprocess.call(['sh', 'activate-persona.sh'])
+    await ctx.send(file=discord.File(r'/root/IA/stargan-v2/expr/results/celeba_hq/reference.jpg'))
 
 
-bot.run(os.environ['BOT_TOKEN'])
+
+@bot.command()
+async def mascota(ctx):
+    os.chdir("/root/IA/stargan-v2")
+    subprocess.call(['sh', 'activate-mascota.sh'])
+    await ctx.send(file=discord.File(r'/root/IA/stargan-v2/expr/results/afhq/reference.jpg'))
+
+bot.run(get_secret('tokenID'))
